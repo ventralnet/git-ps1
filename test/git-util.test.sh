@@ -39,6 +39,27 @@ test__has_staged_returnsTrueStringIfStagedFiles() {
   assertEquals '__has_staged should return an empty string if no staged files' "${r}" ""
 }
 
+test__has_untracked_returnsEmptyStringIfBranchIsClean() {
+  git init
+  local r=`__has_untracked`
+  assertEquals '__has_untracked should return empty string if branch has no untracked' "${r}" ""
+}
+
+test__has_untracked_returnsEmptyStringIfBranchHasStaged() {
+  git init
+  touch a
+  git add a
+  local r=`__has_untracked`
+  assertEquals '__has_untracked should return empty string if branch has staged' "${r}" ""
+}
+
+test__has_untracked_returnsTrueStringIfUntracked() {
+  git init
+  touch a
+  local r=`__has_untracked`
+  assertEquals '__has_untracked should return true string if branch untracked' "${r}" "true"
+}
+
 test__is_dirty_returnsEmptyStringIfBranchIsClean() {
   git init
   local r=`__is_dirty`

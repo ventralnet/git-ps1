@@ -12,12 +12,20 @@ __has_staged() {
   fi
 }
 
+__has_untracked() {
+  if git status --porcelain 2> /dev/null | grep -qE "^\?\?"; then
+    echo "true"
+  else
+    echo ""
+  fi
+}
+
 __is_dirty() {
   # Check for unstaged changes with --shortstat option
   if git diff --shortstat 2> /dev/null | grep -qE "[[:digit:]]+ file[s]* changed"; then
     echo "true"
   # Check for untracked files with --porcelain option
-  elif git status --porcelain 2> /dev/null | grep -qE "^??"; then
+  elif git status --porcelain 2> /dev/null | grep -qE "^\?\?"; then
     echo "true"
   # Check for new files with --cached option (implicitly staged)
   elif git diff --cached --name-only 2> /dev/null | grep -qE "."; then
